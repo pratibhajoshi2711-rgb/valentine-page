@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>My Valentine 💖</title>
+
+<style>
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    font-family: 'Poppins', sans-serif;
+}
+
+/* Romantic Gradient Background before YES */
+body{
+    background: linear-gradient(135deg, #f0b7d2, #f78bc1, #ef79c7);
+    text-align:center;
+    font-style: italic;
+}
+
+/* BEFORE YES TEXT COLOUR */
+.beforeText{
+    color:#536e90;  /* Soft blue */
+}
+
+/* AFTER YES MESSAGE COLOUR */
+#message{
+    display:none;
+    margin-top:40px;
+    z-index:10;
+    position:relative;
+    color:#0a0207;   /* White after yes */
+}
+
+/* Background Video */
+#bgVideo {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    transform: translate(-50%, -50%);
+    z-index: -2;
+    display: none;
+    object-fit: cover;
+    filter: brightness(1.2) saturate(1.3);
+}
+
+/* Main Content */
+.container{
+    margin-top:120px;
+    position: relative;
+    z-index:10;
+}
+
+h1{
+    font-size:70px;
+    text-shadow: 0 0 20px white;
+}
+
+h2{
+    font-size:35px;
+}
+
+/* Buttons */
+button{
+    padding:12px 25px;
+    font-size:20px;
+    border:none;
+    border-radius:30px;
+    cursor:pointer;
+    margin:15px;
+    transition:0.3s;
+}
+
+button:hover{
+    transform: scale(1.1);
+    box-shadow:0 0 20px white;
+}
+
+#yesBtn{
+    background:white;
+    color:#ff1493;
+}
+
+#noBtn{
+    background:white;
+    color:#ff1493;
+    position:absolute;
+}
+
+/* Animation */
+#animation{
+    display:none;
+    font-size:60px;
+    margin-top:50px;
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse{
+    0%{transform:scale(1);}
+    50%{transform:scale(1.3);}
+    100%{transform:scale(1);}
+}
+
+/* Smooth Text */
+.smoothText{
+    opacity: 0;
+    transform: translateY(30px);
+    animation: smoothAppear 1.2s ease forwards;
+    font-size:28px;
+    margin:10px 0;
+}
+
+@keyframes smoothAppear{
+    to{
+        opacity:1;
+        transform: translateY(0);
+    }
+}
+
+/* Floating hearts after YES */
+.floating-heart{
+    position:absolute;
+    bottom:-50px;
+    font-size:20px;
+    animation-name: floatUp;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+
+@keyframes floatUp{
+    0%{ transform: translateY(0) scale(0.5); opacity:0.6;}
+    100%{ transform: translateY(-110vh) scale(1.2); opacity:0;}
+}
+
+/* Confetti / sparkles after YES */
+.confetti{
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    opacity: 0.8;
+    animation-name: confettiFall;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+}
+
+@keyframes confettiFall{
+    0% {transform: translateY(-50px) rotate(0deg);}
+    100% {transform: translateY(110vh) rotate(360deg);}
+}
+</style>
+</head>
+
+<body>
+
+<!-- Background Video -->
+<video id="bgVideo" muted loop>
+    <source src="love.mp4" type="video/mp4">
+</video>
+
+<audio id="bgMusic" loop>
+    <source src="song.mpeg" type="audio/mpeg">
+</audio>
+
+<!-- BEFORE YES CONTENT -->
+<div class="container beforeText" id="mainContent">
+    <h1>Happy Valentine’s Day 💖</h1>
+    <h2>Will You Be My Valentine?</h2>
+    <button id="yesBtn" onclick="startLove()">Yes 💘</button>
+    <button id="noBtn">No 😢</button>
+</div>
+
+<div id="animation">💖💞💖</div>
+
+<div id="message"></div>
+
+<script>
+// No button move
+const noBtn=document.getElementById("noBtn");
+noBtn.addEventListener("mouseenter",()=>{
+    noBtn.style.left=Math.random()*(window.innerWidth-100)+"px";
+    noBtn.style.top=Math.random()*(window.innerHeight-50)+"px";
+});
+
+// Yes click
+function startLove(){
+    document.getElementById("bgVideo").style.display="block";
+    document.getElementById("bgVideo").play();
+    document.getElementById("bgMusic").play();
+
+    document.getElementById("mainContent").style.display="none";
+
+    const anim=document.getElementById("animation");
+    anim.style.display="block";
+
+    setTimeout(()=>{
+        anim.style.display="none";
+        createFloatingHearts();
+        createConfetti();
+        showMessage();
+    },3000);
+}
+
+// Create floating hearts (down → up)
+function createFloatingHearts(){
+    for(let i=0;i<25;i++){
+        const heart=document.createElement("div");
+        heart.className="floating-heart";
+        heart.innerHTML="💖";
+        heart.style.left=Math.random()*window.innerWidth + "px";
+        heart.style.fontSize=(10+Math.random()*30)+"px";
+        heart.style.animationDuration=(4+Math.random()*6) + "s";
+        document.body.appendChild(heart);
+    }
+}
+
+// Create confetti / sparkles (top → down)
+function createConfetti(){
+    for(let i=0;i<40;i++){
+        const c=document.createElement("div");
+        c.className="confetti";
+        c.style.left=Math.random()*window.innerWidth + "px";
+        c.style.backgroundColor=`hsl(${Math.random()*360}, 100%, 70%)`;
+        c.style.width=(5+Math.random()*5)+"px";
+        c.style.height=(5+Math.random()*5)+"px";
+        c.style.animationDuration=(3+Math.random()*5)+"s";
+        document.body.appendChild(c);
+    }
+}
+
+// Smooth message reveal
+function showMessage(){
+    const msg=document.getElementById("message");
+    msg.style.display="block";
+
+    const lines=[
+        "Happy Valentine’s Day mere bcche ❤️",
+        "Tum meri zindagi ka sabse pyaara hissa ho, meri jaan.",
+        "Tumhari ek smile se mera din ban jaata hai.",
+        "Tum mere saath ho, bas itna hi kaafi hai baby 😌",
+        "Main har din tumhe choose karungi — aaj bhi, kal bhi, hamesha.",
+        "I love you endlessly baby 💕✨",
+        "💖 To Atul 💖"
+    ];
+
+    let i=0;
+    function addLine(){
+        if(i<lines.length){
+            const div=document.createElement("div");
+            div.className="smoothText";
+            div.innerHTML=lines[i];
+            msg.appendChild(div);
+            i++;
+            setTimeout(addLine,1000);
+        }
+    }
+    addLine();
+}
+</script>
+
+</body>
+</html>
